@@ -14,12 +14,19 @@ function my_ajax_handler() {
     
 	/* print_r($_POST); */
 	
+	$user_id = $_POST['user_id'];
 	$email = $_POST['new_email'];
 	$exists = email_exists( $email );
 	if ( $exists ) {
 		wp_send_json_error( 'That E-mail is alreday registered' );
 	} else {
+		$args = array(
+			'ID'         => $user_id,
+			'user_email' => esc_attr( $email )
+		);
+		wp_update_user( $args );
 		wp_send_json_success( 'That E-mail does not belong to any registered users on this site' );
+		
 	}
 	
 	
